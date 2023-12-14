@@ -1,8 +1,8 @@
 # _Frozen Lake_:<br>Reinforcement Learning Project
 This project aims to use reinforcement learning principles to create algorithms to find policies that would help us better navigate the "Frozen Lake" environment defined within this project. In this repository, there are two sets of code that is functionally identical. One set is in the Jupyter Notebook format, meant to visually demonstrate the outputs of the tests as well as present any additional explanations or commentary on the code. The other set is regular Python code, meant to be run as an integrated package. The respective sets of files are stored in the following directories of this repository:
 
-- `frozenLake/demo/`: Jupyter Notebooks
-- `frozenLake/main/`: Python files
+- Jupyter Notebook demonstrations: `frozenLake/demo/`
+- Python main implementation codefiles: `frozenLake/main/`
 
 ## Question 1: Environment
 
