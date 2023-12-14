@@ -2,10 +2,10 @@
 from Q1_environment import *
 
 # CONTENTS:
-# 1. Method `policy_evaluation`: Policy evaluation
-# 2. Method `policy_improvement`: Policy improvement
-# 3. Method `policy_iteration`: Policy iteration
-# 4. Method `value_iteration`: Value iteration
+# 1. Method `policy_evaluation`
+# 2. Method `policy_improvement`
+# 3. Method `policy_iteration`
+# 4. Method `value_iteration`
 
 #____________________________________________________________
 # 1. Policy evaluation
