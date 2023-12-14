@@ -1,4 +1,4 @@
-# Importing `environment` module:
+# Importing `Q1_environment` module:
 from Q1_environment import *
 
 # CONTENTS:
