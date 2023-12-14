@@ -259,13 +259,22 @@ def play(env):
         env.render()
         print('Reward: {0}.'.format(r))
 
+# Defining the arenas for testing, i.e. play-areas (can be used elsewhere too)...
+lake = {} # Dictionary to store different lake arenas/play-areas for testing
+lake['small'] = [['&', '.', '.', '.'],
+                 ['.', '#', '.', '#'],
+                 ['.', '.', '.', '#'],
+                 ['#', '.', '.', '$']]
+                 
+lake['big'] = [['&', '.', '.', '.', '.', '.', '.', '.'],
+               ['.', '.', '.', '.', '.', '.', '.', '.'],
+               ['.', '.', '.', '#', '.', '.', '.', '.'],
+               ['.', '.', '.', '.', '.', '#', '.', '.'],
+               ['.', '.', '.', '#', '.', '.', '.', '.'],
+               ['.', '#', '#', '.', '.', '.', '#', '.'],
+               ['.', '#', '.', '.', '#', '.', '#', '.'],
+               ['.', '.', '.', '#', '.', '.', '.', '$']]
+
 # Doing the play-test...
-# NOTE: play` is run only if the module `environment` is run directly & not imported
-def playTest():
-    # The lake environment display:
-    lake = [['&', '.', '.', '.'],
-            ['.', '#', '.', '#'],
-            ['.', '.', '.', '#'],
-            ['#', '.', '.', '$']]
-    play(FrozenLake(lake=lake, slip=0.1, max_steps=10))
-if __name__ == '__main__': playTest()
+# NOTE: It is run only if the module `environment` is run directly & not imported
+if __name__ == '__main__': play(FrozenLake(lake=lake['small'], slip=0.1, max_steps=10))
