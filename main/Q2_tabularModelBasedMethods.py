@@ -154,7 +154,7 @@ def value_iteration(env, gamma, theta, max_iterations, value=None):
 
     #================================================
 
-    # Obtaining the (maybe estimated) optimal policy:
+    # Obtaining the (estimated) optimal policy:
     # NOTE: The logic for this is identical to policy improvement
     policy = policy_improvement(env, value, gamma)
     return policy, value
