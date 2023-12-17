@@ -197,12 +197,12 @@ class FrozenLake(Environment):
         NOTE: In such a case, 1 is returned only if `next_state` == `state`
         '''
         # Obtaining the next state:
-        next = self.state + {0:-nCols, 1:-1, 2:nCols, 3:1}[action]
+        next = state + {0:-nCols, 1:-1, 2:nCols, 3:1}[action]
         # Checking if action leads out of the state:
         if {0:next < 0,
-            1:next % nCols > self.state % nCols,
+            1:next % nCols > state % nCols,
             2:next >= self.n_states,
-            3:next % nCols < self.state % nCols}[action]:
+            3:next % nCols < state % nCols}[action]:
             # If true, no transition; return 1 only if `next_state` == `state`:
             if next_state == state: return 1
             return 0
