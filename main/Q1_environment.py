@@ -1,7 +1,7 @@
 import numpy as np
 import contextlib
 
-# Configures numpy print options
+# Configuring NumPy print options:
 @contextlib.contextmanager
 def _printoptions(*args, **kwargs):
     original = np.get_printoptions()
