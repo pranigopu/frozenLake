@@ -1,7 +1,7 @@
 import numpy as np
 import contextlib
 
-# Configuring NumPy print options:
+# Configures numpy print options
 @contextlib.contextmanager
 def _printoptions(*args, **kwargs):
     original = np.get_printoptions()
@@ -128,6 +128,10 @@ class FrozenLake(Environment):
         Environment.__init__(self, n_states, n_actions, max_steps, pi, seed=seed)
         # NOTE: The starting state is initialised in the above constructor
 
+    #================================================
+    
+    # Executing state-transition given an action:
+    
     def step(self, action):
         # Slipping with `self.slip` chance:
         if np.random.rand() <= self.slip:
@@ -146,7 +150,10 @@ class FrozenLake(Environment):
         done = (state == self.absorbing_state) or done
         return state, reward, done
 
+    #================================================
+    
     # Probability of transitioning from `state` to `next_state` given `action`:
+    
     def p(self, next_state, state, action):
         # CASE 1: At or next to absorbing state
         '''
@@ -166,7 +173,7 @@ class FrozenLake(Environment):
           if next_state == self.absorbing_state: return 1
           return 0
 
-        #================================================
+        #------------------------------------
 
         # CASE 2: Not at or next to absorbing state
         nRows, nCols = self.lake.shape # Only `nCols` is used here
@@ -213,8 +220,11 @@ class FrozenLake(Environment):
         # Given the next state obtained is valid, is it the given next state?
         if next == next_state: return 1 # Yes
         return 0                        # No
-
+  
+    #================================================
+    
     # Reward for transitioning from `state` to `next_state` given `action`:
+    
     def r(self, next_state, state, action):
         # Checking for absorbing state, which is out of bounds of the grid:
         if state == self.absorbing_state: return 0
@@ -225,6 +235,10 @@ class FrozenLake(Environment):
 
         # In all other cases, no reward is obtained:
         return 0
+
+    #================================================
+   
+    # Visualising the agent's performance (by inputs or using a policy):
 
     def render(self, policy=None, value=None):
         if policy is None:
@@ -241,7 +255,7 @@ class FrozenLake(Environment):
             policy = np.array([actions[a] for a in policy[:-1]])
             print(policy.reshape(self.lake.shape))
             print('Value:')
-            with _printoptions(precision=3, suppress=True):
+            with _printoptions(floatmode='fixed', precision=3, suppress=True):
                 print(value[:-1].reshape(self.lake.shape))
 
 #____________________________________________________________
@@ -307,7 +321,10 @@ def displayResults(results, labels, env):
 
     `env` is the instance of the environment model class used for the results.
     '''
-
+    #------------------------------------
+    '''
+    # UNUSED CODE:
+    
     # Printing results:
     print("POLICY & STATE VALUES OBTAINED")
     for result, label in zip(results, labels):
@@ -316,6 +333,7 @@ def displayResults(results, labels, env):
         print(f'Policy:\n{result[0]}\nState values:\n{result[1]}')
 
     # Visualisation of agent's performance:
+    # NOTE: It allows us to directly see the agent following the policy across the grid
     for result, label in zip(results, labels):
         print('\n================================================\n')
         print(f'AGENT PERFORMANCE AFTER {label.upper()}\n')
@@ -326,3 +344,11 @@ def displayResults(results, labels, env):
             state, r, done = env.step(a)
             env.render()
             print(f'Reward: {r}.')
+    '''
+    #------------------------------------
+    # Visualisation of agent's performance:
+    for result, label in zip(results, labels):
+        print('\n================================================\n')
+        print(f'AGENT PERFORMANCE AFTER {label.upper()}\n')
+        state = env.reset()
+        env.render(policy=result[0], value=result[1])

@@ -22,6 +22,7 @@ class LinearWrapper:
     #================================================
 
     # Mapping the given state paired with each action to vectors of features:
+
     def encode_state(self, s):
         # Initialising the feature matrix:
         features = np.zeros((self.n_actions, self.n_features))
@@ -43,6 +44,7 @@ class LinearWrapper:
     #================================================
 
     # Obtaining the policy via decoding the feature matrix:
+
     def decode_policy(self, theta):
         # Initialising the policy & state value arrays:
         policy = np.zeros(self.env.n_states, dtype=int)
@@ -69,19 +71,22 @@ class LinearWrapper:
     #================================================
 
     # Resetting environment & encoding it as feature vector:
+
     def reset(self):
         return self.encode_state(self.env.reset())
 
     #================================================
 
     # Taking a step in environment & encoding next state as feature vector:
+
     def step(self, action):
         state, reward, done = self.env.step(action)
         return self.encode_state(state), reward, done
 
     #================================================
 
-    # Rendering the results of the given policy & state values:
+    # Visualising the agent's performance (by inputs or using a policy):
+
     def render(self, policy=None, value=None):
         self.env.render(policy, value)
 
