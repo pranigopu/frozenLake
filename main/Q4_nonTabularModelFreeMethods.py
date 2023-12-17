@@ -1,0 +1,244 @@
+# Importing `Q1_environment` module:
+from Q1_environment import *
+
+# CONTENTS:
+# 1. Class `LinearWrapper`: Wrapping the environment to enable feature mapping
+# 2. Method `linear_sarsa`: SARSA with linear action value function approximation
+# 3. Method `linear_q_learning`: Q-Learning with linear action value function approximation
+# 4. Code for testing the above functions
+
+# NOTE: The testing code is only run if the current file is executed as the main code.
+
+#____________________________________________________________
+# 1. Wrapping the environment to enable feature mapping
+
+class LinearWrapper:
+    def __init__(self, env):
+        self.env = env
+        self.n_actions = self.env.n_actions
+        self.n_states = self.env.n_states
+        self.n_features = self.n_states * self.n_actions
+
+    #================================================
+
+    # Mapping the given state paired with each action to vectors of features:
+    def encode_state(self, s):
+        # Initialising the feature matrix:
+        features = np.zeros((self.n_actions, self.n_features))
+        for a in range(self.n_actions):
+            i = np.ravel_multi_index((s, a), (self.n_states, self.n_actions))
+            # Updating the feature matrix:
+            features[a, i] = 1.0
+        '''
+        EXPECTED RESULT:
+        `features` is such that each row i corresponds to an action i, each
+        column corresponds to a state-action pair (see implementation notes
+        for more clarity on the structure), and for each row i, 1.0 is assigned
+        only to those indices that correspond the given state s and action i.
+        Hence, each row vector is 1.0 at only one position and 0 in all others.
+        '''
+
+        return features
+
+    #================================================
+
+    # Obtaining the policy via decoding the feature matrix:
+    def decode_policy(self, theta):
+        # Initialising the policy & state value arrays:
+        policy = np.zeros(self.env.n_states, dtype=int)
+        value = np.zeros(self.env.n_states)
+        #------------------------------------
+        # Decoding the action-value function & obtaining policy & state values:
+        for s in range(self.n_states):
+            features = self.encode_state(s)
+            q = features.dot(theta)
+            policy[s] = np.argmax(q)
+            value[s] = np.max(q)
+            '''
+            NOTE ON THE NATURE OF `q`:
+            `q` is calculated each time w.r.t. the given state `s`; do not
+            consider it as an array mapping every possible state-action pair to
+            a value, but rather an array that, given a state, maps every action
+            to a value (effectively mapping the state-action values for the
+            particular state)
+            '''
+        #------------------------------------
+        # Returning obtained policy & state values:
+        return policy, value
+
+    #================================================
+
+    # Resetting environment & encoding it as feature vector:
+    def reset(self):
+        return self.encode_state(self.env.reset())
+
+    #================================================
+
+    # Taking a step in environment & encoding next state as feature vector:
+    def step(self, action):
+        state, reward, done = self.env.step(action)
+        return self.encode_state(state), reward, done
+
+    #================================================
+
+    # Rendering the results of the given policy & state values:
+    def render(self, policy=None, value=None):
+        self.env.render(policy, value)
+
+#____________________________________________________________
+# 2. SARSA with linear action value function approximation
+
+def linear_sarsa(wenv, max_episodes, eta, gamma, epsilon, seed=None):
+    '''
+    NOTE ON THE ARGUMENTS:
+    - `wenv`:
+        - Wrapped object of a chosen environment model (ex. FrozenLake)
+        - Contains mechanisms to map each state to a feature vector
+        - Helpful in estimating action-value function as a linear function
+        - Also helps decode feature vectors to estimated optimal policies
+    - `max_episodes`: Upper limit of episodes the agent can go through
+    - `eta`:
+        - Initial learning rate
+        - The learning rate is meant to decrease linearly over episodes
+    - `gamma`:
+        - Discount factor
+        - Not subject to change over time
+    - `epsilon`:
+        - Initial exploration factor
+        - Exploration factor is w.r.t. epsilon-greedy policy
+        - Denotes the chance of selecting a random state
+        - The exploration factor is meant to decrease linearly over episodes
+    - `seed`:
+        - Optional seed for pseudorandom number generation
+        - By default, it is `None` ==> random seed will be chosen
+    '''
+    random_state = np.random.RandomState(seed)
+    eta = np.linspace(eta, 0, max_episodes)
+    epsilon = np.linspace(epsilon, 0, max_episodes)
+    theta = np.zeros(wenv.n_features)
+
+    # EPSILON-GREEDY POLICY
+    # Implementing the epsilon-greedy policy as a lambda function:
+    e_greedy = lambda q, e: {True: np.random.randint(0,wenv.n_actions),
+                             False: np.argmax(q)}[np.random.rand() < e]
+    # NOTE 1: `q` is the array of rewards per action for a given state
+    # NOTE 2: `e` is the given epsilon value
+
+    for i in range(max_episodes):
+        # NOTE: i ==> episode number
+        # Beginning at the initial state before each episode:
+        features = wenv.reset()
+        # NOTE: `features` here represents the initial state
+        q = features.dot(theta)
+        # NOTE: `q` here is the rewards per action for the initial state
+        a = e_greedy(q, epsilon[i])
+
+        done = False
+        while not done:
+            next_features, r, done = wenv.step(a)
+            # NOTE: `next_features` here represents the next state reached
+
+            # Obtaining part of the temporal difference of `(features, a)`:
+            delta = r - q[a]
+
+            # Selecting action `a` for `next_features`:
+            # NOTE: Selection is done by epsilon greedy policy based on `q`
+            q = next_features.dot(theta)
+            # NOTE: `q` here is the rewards per action for the next state
+            next_a = e_greedy(q, epsilon[i])
+            # NOTE: `next_a` is the action taken in the next state
+
+            # Obtaining the full temporal difference of `(features, a)`:
+            delta += gamma*q[next_a]
+
+            # Updating model parameters `theta`:
+            theta += eta[i]*delta*features[a]
+            # `next_features[a]` is feature vector for state `s` & action `a`
+
+            # Moving to the next state & its corresponding action:
+            features, a = next_features, next_a
+
+    # Returning the parameter vector `theta`:
+    return theta
+
+#____________________________________________________________
+# 3. Q-Learning with linear action value function approximation
+
+def linear_q_learning(wenv, max_episodes, eta, gamma, epsilon, seed=None):
+    '''
+    NOTE ON THE ARGUMENTS:
+    Same as for the function `linear_sarsa`.
+    '''
+    random_state = np.random.RandomState(seed)
+    eta = np.linspace(eta, 0, max_episodes)
+    epsilon = np.linspace(epsilon, 0, max_episodes)
+    theta = np.zeros(wenv.n_features)
+
+    # EPSILON-GREEDY POLICY
+    # Implementing the epsilon-greedy policy as a lambda function:
+    e_greedy = lambda q, e: {True: np.random.randint(0,wenv.n_actions),
+                             False: np.argmax(q)}[np.random.rand() < e]
+    # NOTE 1: `q` is the array of rewards per action for a given state
+    # NOTE 2: `e` is the given epsilon value
+
+    for i in range(max_episodes):
+        # NOTE: i ==> episode number
+        # Beginning at the initial state before each episode:
+        features = wenv.reset()
+        # NOTE: `features` here represents the initial state
+        q = features.dot(theta)
+        # NOTE: `q` here is the rewards per action for the initial state
+        a = e_greedy(q, epsilon[i])
+
+        done = False
+        while not done:
+            next_features, r, done = wenv.step(a)
+            # NOTE: `next_features` here represents the next state reached
+
+            # Obtaining part of the temporal difference of `(features, a)`:
+            delta = r - q[a]
+
+            # Selecting action `a` for `next_features`:
+            # NOTE: Selection is done by epsilon greedy policy based on `q`
+            q = next_features.dot(theta)
+            # NOTE: `q` here is the rewards per action for the next state
+            max_a = np.argmax(q)
+            # NOTE: `max_a` is the action maximising `q` for next state
+
+            # Obtaining the full temporal difference of `(features, a)`:
+            delta += gamma*q[max_a]
+
+            # Updating model parameters `theta`:
+            theta += eta[i]*delta*features[a]
+            # `next_features[a]` is feature vector for state `s` & action `a`
+
+            # Moving to the next state & its corresponding action:
+            features, a = next_features, e_greedy(q, epsilon[i])
+
+    # Returning the parameter vector `theta`:
+    return theta
+
+#____________________________________________________________
+# 4. Code for testing the above functions
+
+# NOTE: The testing code is only run if the current file is executed as the main code.
+
+if __name__ == '__main__':
+    # Defining the parameters:
+    env = FrozenLake(lake['small'], 0.1, 100)
+    wenv = LinearWrapper(env)
+    max_episodes = 2000
+    eta = 1
+    gamma = 0.9
+    epsilon = 1
+
+    # Running the functions:
+    theta_SARSA = linear_sarsa(wenv, max_episodes, eta, gamma, epsilon)
+    theta_QLearning = linear_q_learning(wenv, max_episodes, eta, gamma, epsilon)
+    
+    LSARSA = wenv.decode_policy(theta_SARSA)
+    LQLearning = wenv.decode_policy(theta_QLearning)
+    labels = ("linear sarsa", "linear q-learning")
+
+    # Displaying results:
+    displayResults((LSARSA, LQLearning), labels, env)
