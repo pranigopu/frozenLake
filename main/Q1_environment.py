@@ -14,6 +14,9 @@ def _printoptions(*args, **kwargs):
 # 2. Class `Environment`: General class for environment model
 # 3. Class `FrozenLake`: Frozen lake environment class
 # 4. Method `play``: Play-testing
+# 5. Method `displayResults`: # Policy & state-value display function
+    
+# NOTE: `displayResults` will be relevant for other modules where policy & state-value function are obtained.
 
 #____________________________________________________________
 # 1. General abstract class for framework of environment models
@@ -198,7 +201,7 @@ class FrozenLake(Environment):
         '''
         # Obtaining the next state:
         next = state + {0:-nCols, 1:-1, 2:nCols, 3:1}[action]
-        # Checking if action leads out of the state:
+        # Checking if action leads out of the grid:
         if {0:next < 0,
             1:next % nCols > state % nCols,
             2:next >= self.n_states,
@@ -259,6 +262,8 @@ def play(env):
         env.render()
         print('Reward: {0}.'.format(r))
 
+#================================================
+
 # Defining the arenas for testing, i.e. play-areas (can be used elsewhere too)...
 lake = {} # Dictionary to store different lake arenas/play-areas for testing
 lake['small'] = [['&', '.', '.', '.'],
@@ -278,3 +283,46 @@ lake['big'] = [['&', '.', '.', '.', '.', '.', '.', '.'],
 # Doing the play-test...
 # NOTE: It is run only if the module `environment` is run directly & not imported
 if __name__ == '__main__': play(FrozenLake(lake=lake['small'], slip=0.1, max_steps=10))
+
+#____________________________________________________________
+# 5. Policy & state-value display function
+
+'''
+The following function allows the standarised presentation of the results
+of various policy-finding functions that simultaneously obtain state values
+(i.e. estimate the state value function using an array).
+'''
+
+def displayResults(results, labels, env):
+    '''
+    `results` contains k pairs, each pair consisting (in order)
+    (1) the deterministic policy (an array of actions to be taken per state) &
+    (2) the estimated state values (an array of values evaluated per state)
+    The policy and state values are those derived by a specific algorithm (ex.
+    policy iteration). The results for each are displayed in an organised
+    format for easy testing.
+
+    `labels` contain the names or labels to be given for each pair of results,
+    such as the name of the algorithm used to derive the results.
+
+    `env` is the instance of the environment model class used for the results.
+    '''
+
+    # Printing results:
+    print("POLICY & STATE VALUES OBTAINED")
+    for result, label in zip(results, labels):
+        print('------------------------------------')
+        print(f'FOR {label.upper()}')
+        print(f'Policy:\n{result[0]}\nState values:\n{result[1]}')
+
+    # Visualisation of agent's performance:
+    for result, label in zip(results, labels):
+        print('\n================================================\n')
+        print(f'AGENT PERFORMANCE AFTER {label.upper()}\n')
+        state = env.reset()
+        done = False
+        while not done:
+            a = result[0][state]
+            state, r, done = env.step(a)
+            env.render()
+            print(f'Reward: {r}.')
