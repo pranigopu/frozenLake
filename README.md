@@ -29,3 +29,10 @@ This project aims to use reinforcement learning principles to create algorithms 
 
 - SARSA control `sarsa`<br>**NOTE**: SARSA $\implies$ State-Action-Reward-State-Action
 - Q-Learning `q_learning`
+
+## Question 4: Non-tabular Model-free Methods
+
+**File name (without extension)**: `Q4_nonTabularModelFreeMethods`
+
+- SARSA with linear approximation of action-value function `linear_sarsa`
+- Q-Learning with linear approximation of action-value function `linear_q_learning`<br>
