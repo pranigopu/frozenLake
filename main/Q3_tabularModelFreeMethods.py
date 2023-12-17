@@ -4,6 +4,9 @@ from Q1_environment import *
 # CONTENTS:
 # 1. Method `sarsa`: SARSA control
 # 2. Method `q_learning`: Q-learning
+# 3. Code for testing the above functions
+
+# NOTE: The testing code is only run if the current file is executed as the main code.
 
 #____________________________________________________________
 # 1. SARSA control
@@ -169,3 +172,24 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
     value = q.max(axis=1)
     # Returning the above obtained policy & state value array:
     return policy, value
+
+#____________________________________________________________
+# 3. Code for testing the above functions
+
+# NOTE: The testing code is only run if the current file is executed as the main code.
+
+if __name__ == '__main__':
+    # Defining the parameters:
+    env = FrozenLake(lake['small'], 0.1, 100)
+    max_episodes = 2000
+    eta = 1
+    gamma = 0.9
+    epsilon = 1
+
+    # Running the functions:
+    SARSA = sarsa(env, max_episodes, eta, gamma, epsilon)
+    QLearning = q_learning(env, max_episodes, eta, gamma, epsilon)
+    labels = ("sarsa", "q-learning")
+
+    # Displaying results:
+    displayResults((SARSA, QLearning), labels, env)
