@@ -5,3 +5,4 @@ This is the primary code for the "Frozen Lake" project. It consists of regular P
 - `Q1_environment.py`
 - `Q2_tabularModelBasedMethods.py`
 - `Q3_tabularModelFreeMethods.py`
+- `Q4_nonTabularModelFreeMethods.py`
