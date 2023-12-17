@@ -6,6 +6,9 @@ from Q1_environment import *
 # 2. Method `policy_improvement`
 # 3. Method `policy_iteration`
 # 4. Method `value_iteration`
+# 5. Code for testing the above functions
+
+# NOTE: The testing code is only run if the current file is executed as the main code.
 
 #____________________________________________________________
 # 1. Policy evaluation
@@ -28,7 +31,7 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
     with a particular action.
     '''
     # Initialising table of values per state:
-    value = np.zeros(env.n_states, dtype=np.float)
+    value = np.zeros(env.n_states, dtype=float)
     # Flag for indicating convergence of value evaluation:
     flag = 0
     # Policy evaluation loop:
@@ -43,9 +46,9 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
             value[s] = 0
             for a in range(env.n_actions):
                 # NOTE: a ==> action
-                # If policy does not map s to a, move to next action:
+                # If policy does not map `s` to `a`, move to next action:
                 if policy[s] != a: continue
-                # If policy does map s to a, update state value:
+                # If policy does map `s` to `a`, update state value:
                 for _s in range(env.n_states):
                     # NOTE: _s ==> next state
                     value[s] += env.p(_s,s,a)*(env.r(_s,s,a) + gamma*value[_s])
@@ -94,7 +97,7 @@ def policy_improvement(env, value, gamma):
                 improvement is implicit in the array of state values `value`,
                 since this array was obtained with respect to some policy.
                 '''
-                q[a] += env.p(_s,s,a)*(env.r(_s,s,a) + gamma*value[_s])
+                q[a] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
                 '''
                 NOTE ON ABOVE USED FUNCTIONS:
                 env.p: Probability of moving from s to _s given action a
@@ -138,7 +141,7 @@ def value_iteration(env, gamma, theta, max_iterations, value=None):
                 for _s in range(env.n_states):
                     # NOTE: _s ==> next state
                     # Total reward of taking a from s for previous state value:
-                    q[a] += env.p(_s,s,a)*(env.r(_s,s,a) + gamma*value[_s])
+                    q[a] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
                     '''
                     NOTE ON ABOVE USED FUNCTIONS:
                     env.p: Probability of moving from s to _s given action a
@@ -158,3 +161,23 @@ def value_iteration(env, gamma, theta, max_iterations, value=None):
     # NOTE: The logic for this is identical to policy improvement
     policy = policy_improvement(env, value, gamma)
     return policy, value
+
+#____________________________________________________________
+# 5. Code for testing the above functions
+
+# NOTE: The testing code is only run if the current file is executed as the main code.
+
+if __name__ == '__main__':
+    # Defining the parameters:
+    env = FrozenLake(lake['small'], 0.1, 100)
+    gamma = 0.9
+    theta = 0.01
+    max_iterations = 100
+
+    # Running the functions:
+    PI = policy_iteration(env, gamma, theta, max_iterations)
+    VI = value_iteration(env, gamma, theta, max_iterations)
+    labels = ("policy iteration", "value iteration")
+
+    # Displaying results:
+    displayResults((PI, VI), labels, env)
