@@ -36,3 +36,7 @@ This project aims to use reinforcement learning principles to create algorithms 
 
 - SARSA with linear approximation of action-value function `linear_sarsa`
 - Q-Learning with linear approximation of action-value function `linear_q_learning`<br>
+
+## Other implementation notes
+### Setting random state for repeatability
+Sometimes when you are using randomization in a part of the codebase, you want to get the same result independent of the iteration you are running the code. `np.random.RandomState` allows you to set the same random state in all the NumPy operations, if there are related with randomization. In particular, you can pass a particular seed and replicate the same results over and over.
