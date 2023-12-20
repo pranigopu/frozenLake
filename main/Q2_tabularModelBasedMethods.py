@@ -16,7 +16,7 @@ from Q1_environment import *
 def policy_evaluation(env, policy, gamma, theta, max_iterations):
     '''
     NOTE ON THE ARGUMENTS:
-    `env`: Object of the chosen environment class (ex. FrozenLake)
+    `env`: Object of the chosen environment class (ex. `FrozenLake`)
     `policy`: Array giving the probability of taking an action from a state
     `gamma`: Discount factor
     `theta`: Error tolerance level
@@ -50,12 +50,12 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
                 if policy[s] != a: continue
                 # If policy does map `s` to `a`, update state value:
                 for _s in range(env.n_states):
-                    # NOTE: _s ==> next state
+                    # NOTE: `_s` ==> next state
                     value[s] += env.p(_s,s,a)*(env.r(_s,s,a) + gamma*value[_s])
                     '''
                     NOTE ON ABOVE USED FUNCTIONS:
-                    env.p: Probability of moving from s to _s given action a
-                    env.r: Reward of moving from s to _s given action a
+                    env.p: Probability of moving `s` to `_s` given action a
+                    env.r: Reward of moving `s` to `_s` given action a
                     '''
             #------------------------------------
             # Obtaining the difference in state value:
@@ -72,7 +72,7 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
 def policy_improvement(env, value, gamma):
     '''
     NOTE ON THE ARGUMENTS:
-    `env`: Object of the chosen environment class (ex. FrozenLake)
+    `env`: Object of the chosen environment class (ex. `FrozenLake`)
     `value`: Array containing values of each state with respect to some policy
     `gamma`: Discount factor
 
@@ -80,7 +80,7 @@ def policy_improvement(env, value, gamma):
     The goal of policy improvement is to improve on the previously used policy
     (which is implicit in the array of state values, which is evaluated with
     respect to some policy). We do this by choosing for each state s the action
-    a such that we maximise the reward of taking a from s (irrespective of
+    a such that we maximise the reward of taking `a` from `s` (irrespective of
     policy) then following the previous policy (which is implicit in the array
     of state values).
     '''
@@ -100,8 +100,8 @@ def policy_improvement(env, value, gamma):
                 q[a] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
                 '''
                 NOTE ON ABOVE USED FUNCTIONS:
-                env.p: Probability of moving from s to _s given action a
-                env.r: Reward of moving from s to _s given action a
+                `env.p`: Probability of moving `s` to `_s` given action `a`
+                `env.r`: Reward of moving `s` to `_s` given action `a`
                 '''
         # Update policy to maximise the one-step dynamics from s:
         policy[s] = np.argmax(q)
@@ -119,7 +119,7 @@ def policy_iteration(env, gamma, theta, max_iterations, policy=None):
     for i in range(max_iterations):
         policy = policy_improvement(env, value, gamma)
         new_value = policy_evaluation(env, policy, gamma, theta, max_iterations)
-        # If all value evaluations change less than theta, break:
+        # If all value evaluations change less than `theta`, break:
         if all(abs(new_value-value) < theta): break
         # Else, continue improving with the newly evaluated state values:
         value = new_value
@@ -139,15 +139,15 @@ def value_iteration(env, gamma, theta, max_iterations, value=None):
             q = np.zeros(env.n_actions, dtype=np.float32)
             for a in range(env.n_actions):
                 for _s in range(env.n_states):
-                    # NOTE: _s ==> next state
-                    # Total reward of taking a from s for previous state value:
+                    # NOTE: `_s` ==> next state
+                    # Total reward of taking `a` from `s` for previous state value:
                     q[a] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
                     '''
                     NOTE ON ABOVE USED FUNCTIONS:
                     env.p: Probability of moving from s to _s given action a
                     env.r: Reward of moving from s to _s given action a
                     '''
-            # Update policy to maximise the one-step dynamics from s:
+            # Update policy to maximise the one-step dynamics from `s`:
             v = value[s]
             value[s] = np.max(q)
             if abs(value[s]-v) < theta: flag += 1
