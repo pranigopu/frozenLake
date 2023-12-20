@@ -14,7 +14,7 @@ from Q1_environment import *
 def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
     '''
     NOTE ON THE ARGUMENTS:
-    - `env`: Object of the chosen environment class (ex. FrozenLake)
+    - `env`: Object of the chosen environment class (ex. `FrozenLake`)
     - `max_episodes`: Upper limit of episodes the agent can go through
     - `eta`:
         - Array of learning rates w.r.t. episodes
@@ -32,23 +32,25 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
         - Optional seed for pseudorandom number generation
         - By default, it is `None` ==> random seed will be chosen
     '''
-    # EPSILON-GREEDY POLICY
-    # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda s: {True: np.random.randint(0, env.n_actions),
-                          False: policy[s]}[np.random.rand() < epsilon]
-    
-    #================================================
-
     # INITIALISATION
-    # Choosing a random initial state:
+    # Setting random state with `seed` for enabling replicability:
     random_state = np.random.RandomState(seed)
-    # Initialising array of learning rates:
+
+    # Initialising key parameters:
+    # 1. Array of linearly decreasing learning rates:
     eta = np.linspace(eta, 0, max_episodes)
-    # Initialising array of exploration factors:
+    # 2. Array of linearly decreasing exploration factors:
     epsilon = np.linspace(epsilon, 0, max_episodes)
-    # Initialising of state-action values:
+    # 3. Array of state-action values:
     q = np.zeros((env.n_states, env.n_actions))
 
+    #================================================
+    
+    # EPSILON-GREEDY POLICY
+    # Implementing the epsilon-greedy policy as a lambda function:
+    e_greedy = lambda s: {True: random_state.randint(0, env.n_actions),
+                          False: policy[s]}[random_state.rand() < epsilon]
+    
     #================================================
 
     # LEARNING LOOP
@@ -65,7 +67,7 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
         absorbing state for any action it takes. In our implementation, the
         states are a sequence of integers starting from 0, with the greatest
         integer `env.n_states-1` being reserved for the absorbing state.
-        If a state s is terminal, then the probability of transitioning to
+        If `a` state `s` is terminal, then the probability of transitioning to
         the absorbing state for any action is 1, hence the following condition.
         '''
         while env.p(env.n_states-1, s, a) != 1:
@@ -116,23 +118,25 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
         - Optional seed for pseudorandom number generation
         - By default, it is `None` ==> random seed will be chosen
     '''
-    # EPSILON-GREEDY POLICY
-    # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda s: {True: np.random.randint(0, env.n_actions),
-                          False: policy[s]}[np.random.rand() < epsilon]
-    
-    #================================================
-
     # INITIALISATION
-    # Choosing a random initial state:
+    # Setting random state with `seed` for enabling replicability:
     random_state = np.random.RandomState(seed)
-    # Initialising array of learning rates:
+
+    # Initialising key parameters:
+    # 1. Array of linearly decreasing learning rates:
     eta = np.linspace(eta, 0, max_episodes)
-    # Initialising array of exploration factors:
+    # 2. Array of linearly decreasing exploration factors:
     epsilon = np.linspace(epsilon, 0, max_episodes)
-    # Initialising of state-action values:
+    # 3. Array of state-action values:
     q = np.zeros((env.n_states, env.n_actions))
 
+    #================================================
+
+    # EPSILON-GREEDY POLICY
+    # Implementing the epsilon-greedy policy as a lambda function:
+    e_greedy = lambda s: {True: random_state.randint(0, env.n_actions),
+                          False: policy[s]}[random_state.rand() < epsilon]
+    
     #================================================
 
     # LEARNING LOOP
