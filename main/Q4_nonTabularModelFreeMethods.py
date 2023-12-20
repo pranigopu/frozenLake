@@ -117,18 +117,27 @@ def linear_sarsa(wenv, max_episodes, eta, gamma, epsilon, seed=None):
         - Optional seed for pseudorandom number generation
         - By default, it is `None` ==> random seed will be chosen
     '''
+    # INITIALISATION
+    # Setting random state with `seed` for enabling replicability:
     random_state = np.random.RandomState(seed)
+
+    # Initialising key parameters:
     eta = np.linspace(eta, 0, max_episodes)
     epsilon = np.linspace(epsilon, 0, max_episodes)
     theta = np.zeros(wenv.n_features)
 
+    #================================================
+
     # EPSILON-GREEDY POLICY
     # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda q, e: {True: np.random.randint(0,wenv.n_actions),
-                             False: np.argmax(q)}[np.random.rand() < e]
+    e_greedy = lambda q, e: {True: random_state.randint(0,wenv.n_actions),
+                             False: np.argmax(q)}[random_state.rand() < e]
     # NOTE 1: `q` is the array of rewards per action for a given state
     # NOTE 2: `e` is the given epsilon value
 
+    #================================================
+
+    # LEARNING LOOP
     for i in range(max_episodes):
         # NOTE: i ==> episode number
         # Beginning at the initial state before each episode:
@@ -174,18 +183,26 @@ def linear_q_learning(wenv, max_episodes, eta, gamma, epsilon, seed=None):
     NOTE ON THE ARGUMENTS:
     Same as for the function `linear_sarsa`.
     '''
+    # Setting random state with `seed` for enabling replicability:
     random_state = np.random.RandomState(seed)
+
+    # Initialising key parameters:
     eta = np.linspace(eta, 0, max_episodes)
     epsilon = np.linspace(epsilon, 0, max_episodes)
     theta = np.zeros(wenv.n_features)
 
+    #================================================
+
     # EPSILON-GREEDY POLICY
     # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda q, e: {True: np.random.randint(0,wenv.n_actions),
-                             False: np.argmax(q)}[np.random.rand() < e]
+    e_greedy = lambda q, e: {True: random_state.randint(0,wenv.n_actions),
+                             False: np.argmax(q)}[random_state.rand() < e]
     # NOTE 1: `q` is the array of rewards per action for a given state
     # NOTE 2: `e` is the given epsilon value
 
+    #================================================
+
+    # LEARNING LOOP
     for i in range(max_episodes):
         # NOTE: i ==> episode number
         # Beginning at the initial state before each episode:
