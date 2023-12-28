@@ -1,6 +1,6 @@
 # Importing the necessary context:
 from CONTEXT import *
-# NOTE: Module `Q1_environment is imported within module `CONTEXT`
+# NOTE: All contents from module `Q1_environment were imported within module `CONTEXT`
 from Q2_tabularModelBasedMethods import *
 from Q3_tabularModelFreeMethods import *
 from Q4_nonTabularModelFreeMethods import *
