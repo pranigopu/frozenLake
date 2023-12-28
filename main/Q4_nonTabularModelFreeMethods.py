@@ -1,5 +1,5 @@
-# Importing `Q1_environment` module:
-from Q1_environment import *
+# Importing the necessary context:
+from CONTEXT import *
 
 # CONTENTS:
 # 1. Class `LinearWrapper`: Wrapping the environment to enable feature mapping
@@ -7,7 +7,7 @@ from Q1_environment import *
 # 3. Method `linear_q_learning`: Q-Learning with linear action value function approximation
 # 4. Code for testing the above functions
 
-# NOTE: The testing code is only run if the current file is executed as the main code.
+# NOTE: The testing code is only run if the current file is executed as the main code
 
 #____________________________________________________________
 # 1. Wrapping the environment to enable feature mapping
@@ -130,7 +130,7 @@ def linear_sarsa(wenv, max_episodes, eta, gamma, epsilon, seed=None):
 
     # EPSILON-GREEDY POLICY
     # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda q, e: {True: random_state.randint(0,wenv.n_actions),
+    e_greedy = lambda q, e: {True: random_state.randint(0, wenv.n_actions),
                              False: np.argmax(q)}[random_state.rand() < e]
     # NOTE 1: `q` is the array of rewards per action for a given state
     # NOTE 2: `e` is the given epsilon value
@@ -247,19 +247,20 @@ def linear_q_learning(wenv, max_episodes, eta, gamma, epsilon, seed=None):
 
 if __name__ == '__main__':
     # Defining the parameters:
-    env = FrozenLake(lake['small'], 0.1, 100)
+    env = FrozenLake(lake=LAKE['small'], slip=0.1, max_steps=None, seed=0)
+    # NOTE: Putting `max_steps=None` makes it default to the grid size
     wenv = LinearWrapper(env)
     max_episodes = 2000
     eta = 1
-    gamma = 0.9
+    gamma = GAMMA
     epsilon = 1
 
     # Running the functions:
-    theta_SARSA = linear_sarsa(wenv, max_episodes, eta, gamma, epsilon)
-    theta_QLearning = linear_q_learning(wenv, max_episodes, eta, gamma, epsilon)
+    _LSARSA = linear_sarsa(wenv, max_episodes, eta, gamma, epsilon, 0)
+    _LQLearning = linear_q_learning(wenv, max_episodes, eta, gamma, epsilon, 0)
     
-    LSARSA = wenv.decode_policy(theta_SARSA)
-    LQLearning = wenv.decode_policy(theta_QLearning)
+    LSARSA = wenv.decode_policy(_LSARSA)
+    LQLearning = wenv.decode_policy(_LQLearning)
     labels = ("linear sarsa", "linear q-learning")
 
     # Displaying results:

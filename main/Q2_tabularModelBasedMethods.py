@@ -1,5 +1,5 @@
-# Importing `Q1_environment` module:
-from Q1_environment import *
+# Importing the necessary context:
+from CONTEXT import *
 
 # CONTENTS:
 # 1. Method `policy_evaluation`
@@ -8,7 +8,7 @@ from Q1_environment import *
 # 4. Method `value_iteration`
 # 5. Code for testing the above functions
 
-# NOTE: The testing code is only run if the current file is executed as the main code.
+# NOTE: The testing code is only run if the current file is executed as the main code
 
 #____________________________________________________________
 # 1. Policy evaluation
@@ -32,10 +32,10 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
     '''
     # Initialising table of values per state:
     value = np.zeros(env.n_states, dtype=float)
-    # Flag for indicating convergence of value evaluation:
-    flag = 0
     # Policy evaluation loop:
     for i in range(max_iterations):
+        # Flag for indicating convergence of value evaluation:
+        flag = 0
         for s in range(env.n_states):
             # NOTE: s ==> state
             # Storing previous value of value function:
@@ -43,24 +43,24 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
             #------------------------------------
             # Obtaining current value of value function:
             # NOTE: We iterate through every possible action from state `s`
-            value[s] = 0
+            value[s] = float(0)
             for a in range(env.n_actions):
                 # NOTE: a ==> action
                 # If policy does not map `s` to `a`, move to next action:
                 if policy[s] != a: continue
                 # If policy does map `s` to `a`, update state value:
                 for _s in range(env.n_states):
-                    # NOTE: `_s` ==> next state
-                    value[s] += env.p(_s,s,a)*(env.r(_s,s,a) + gamma*value[_s])
+                    # NOTE: _s ==> next state
+                    value[s] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
                     '''
                     NOTE ON ABOVE USED FUNCTIONS:
-                    env.p: Probability of moving `s` to `_s` given action a
-                    env.r: Reward of moving `s` to `_s` given action a
+                    `env.p`: Probability of moving `s` to `_s` given action `a`
+                    `env.r`: Reward of moving `s` to `_s` given action `a`
                     '''
             #------------------------------------
             # Obtaining the difference in state value:
             # NOTE: This is why we stored the previous value before in `v`
-            if abs(value[s]-v) < theta: flag += 1
+            if abs(value[s]-v) <= theta: flag += 1
 
         # If difference in state value < theta for all states, stop:
         if flag == env.n_states: break
@@ -79,17 +79,17 @@ def policy_improvement(env, value, gamma):
     NOTE ON POLICY IMPROVEMENT:
     The goal of policy improvement is to improve on the previously used policy
     (which is implicit in the array of state values, which is evaluated with
-    respect to some policy). We do this by choosing for each state s the action
-    a such that we maximise the reward of taking `a` from `s` (irrespective of
-    policy) then following the previous policy (which is implicit in the array
-    of state values).
+    respect to some policy). We do this by choosing for each state `s` the
+    action `a` such that we maximise the reward of taking a from `s`
+    (irrespective of policy) then following the previous policy (which is
+    implicit in the array of state values).
     '''
     policy = np.zeros(env.n_states, dtype=int)
     for s in range(env.n_states):
         q = np.zeros(env.n_actions, dtype=np.float32)
         for a in range(env.n_actions):
             for _s in range(env.n_states):
-                # NOTE: _s ==> next state
+                # NOTE: `_s` ==> next state
                 # Total reward of taking a from s then following last policy:
                 '''
                 NOTE ON LAST POLICY:
@@ -100,10 +100,10 @@ def policy_improvement(env, value, gamma):
                 q[a] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
                 '''
                 NOTE ON ABOVE USED FUNCTIONS:
-                `env.p`: Probability of moving `s` to `_s` given action `a`
+                `env.p`: Probability of moving `s` to _s given action `a`
                 `env.r`: Reward of moving `s` to `_s` given action `a`
                 '''
-        # Update policy to maximise the one-step dynamics from s:
+        # Update policy to maximise the one-step dynamics from `s`:
         policy[s] = np.argmax(q)
     return policy
 
@@ -111,6 +111,14 @@ def policy_improvement(env, value, gamma):
 # 3. Policy iteration
 
 def policy_iteration(env, gamma, theta, max_iterations, policy=None):
+    '''
+    NOTE ON THE ARGUMENTS:
+    Same as for the function `policy_evaluation`.
+
+    NOTE ON POLICY ITERATION:
+    The goal of policy iteration is to perform alternate steps of policy
+    evaluation & policy improvement to approach the optimal policy.
+    '''
     if policy is None: policy = np.zeros(env.n_states, dtype=int)
     else: policy = np.array(policy, dtype=int)
     # Initialising state values with respect to existing policy:
@@ -120,37 +128,48 @@ def policy_iteration(env, gamma, theta, max_iterations, policy=None):
         policy = policy_improvement(env, value, gamma)
         new_value = policy_evaluation(env, policy, gamma, theta, max_iterations)
         # If all value evaluations change less than `theta`, break:
-        if all(abs(new_value-value) < theta): break
+        if all(abs(new_value-value) <= theta): break
         # Else, continue improving with the newly evaluated state values:
         value = new_value
-    return policy, value
+
+    # FORMAT OF RETURN: policy, state-values, iterations taken to converge
+    return policy, value, i
 
 #____________________________________________________________
 # 4. Value iteration
 
 def value_iteration(env, gamma, theta, max_iterations, value=None):
+    '''
+    NOTE ON THE ARGUMENTS:
+    Same as for the function `policy_evaluation`.
+
+    NOTE ON POLICY ITERATION:
+    The goal of value iteration is to use action-value function estimates to
+    directly approach the optimal policy's state values and use this to obtain
+    the final (hopefully optimal) policy.
+    '''
     if value is None: value = np.zeros(env.n_states)
     else: value = np.array(value, dtype=np.float)
-    # Flag for indicating convergence of value evaluation:
-    flag = 0
     # Value iteration loop:
     for i in range(max_iterations):
+        # Flag for indicating convergence of value evaluation:
+        flag = 0
         for s in range(env.n_states):
             q = np.zeros(env.n_actions, dtype=np.float32)
             for a in range(env.n_actions):
                 for _s in range(env.n_states):
-                    # NOTE: `_s` ==> next state
-                    # Total reward of taking `a` from `s` for previous state value:
+                    # NOTE: _s ==> next state
+                    # Total reward of taking a from s for previous state value:
                     q[a] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
                     '''
                     NOTE ON ABOVE USED FUNCTIONS:
-                    env.p: Probability of moving from s to _s given action a
-                    env.r: Reward of moving from s to _s given action a
+                    `env.p`: Probability of moving `s` to `_s` given action `a`
+                    `env.r`: Reward of moving from `s` to `_s` given action `a`
                     '''
-            # Update policy to maximise the one-step dynamics from `s`:
+            # Update policy to maximise the one-step dynamics from s:
             v = value[s]
             value[s] = np.max(q)
-            if abs(value[s]-v) < theta: flag += 1
+            if abs(value[s]-v) <= theta: flag += 1
 
         # If difference in state value < theta for all states, stop:
         if flag == env.n_states: break
@@ -160,18 +179,21 @@ def value_iteration(env, gamma, theta, max_iterations, value=None):
     # Obtaining the (estimated) optimal policy:
     # NOTE: The logic for this is identical to policy improvement
     policy = policy_improvement(env, value, gamma)
-    return policy, value
+
+    # FORMAT OF RETURN: policy, state-values, iterations taken to converge
+    return policy, value, i
 
 #____________________________________________________________
 # 5. Code for testing the above functions
 
-# NOTE: The testing code is only run if the current file is executed as the main code.
+# NOTE: The testing code is only run if the current file is executed as the main code
 
 if __name__ == '__main__':
     # Defining the parameters:
-    env = FrozenLake(lake['small'], 0.1, 100)
-    gamma = 0.9
-    theta = 0.01
+    env = FrozenLake(lake=LAKE['small'], slip=0.1, max_steps=None, seed=0)
+    # NOTE: Putting `max_steps=None` makes it default to the grid size
+    gamma = GAMMA
+    theta = 0.001
     max_iterations = 100
 
     # Running the functions:
@@ -180,4 +202,4 @@ if __name__ == '__main__':
     labels = ("policy iteration", "value iteration")
 
     # Displaying results:
-    displayResults((PI, VI), labels, env)
+    displayResults((PI, VI), labels, env, theta)

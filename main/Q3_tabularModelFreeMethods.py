@@ -1,12 +1,12 @@
-# Importing `Q1_environment` module:
-from Q1_environment import *
+# Importing the necessary context:
+from CONTEXT import *
 
 # CONTENTS:
 # 1. Method `sarsa`: SARSA control
 # 2. Method `q_learning`: Q-learning
 # 3. Code for testing the above functions
 
-# NOTE: The testing code is only run if the current file is executed as the main code.
+# NOTE: The testing code is only run if the current file is executed as the main code
 
 #____________________________________________________________
 # 1. SARSA control
@@ -14,20 +14,19 @@ from Q1_environment import *
 def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
     '''
     NOTE ON THE ARGUMENTS:
-    - `env`: Object of the chosen environment class (ex. `FrozenLake`)
+    - `env`: Object of the chosen environment class (ex. FrozenLake)
     - `max_episodes`: Upper limit of episodes the agent can go through
     - `eta`:
-        - Array of learning rates w.r.t. episodes
-        - `eta[i]` ==> learning rate for the ith episode
-        - Meant to decrease linearly over time
+        - Initial learning rate
+        - The learning rate is meant to decrease linearly over episodes
     - `gamma`:
         - Discount factor
         - Not subject to change over time
     - `epsilon`:
-        - An array of exploration factors w.r.t. episodes
-        - `epsilon[i]` ==> exploration factor for the ith episode
+        - Initial exploration factor
         - Exploration factor is w.r.t. epsilon-greedy policy
         - Denotes the chance of selecting a random state
+        - The exploration factor is meant to decrease linearly over episodes
     - `seed`:
         - Optional seed for pseudorandom number generation
         - By default, it is `None` ==> random seed will be chosen
@@ -43,14 +42,23 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
     epsilon = np.linspace(epsilon, 0, max_episodes)
     # 3. Array of state-action values:
     q = np.zeros((env.n_states, env.n_actions))
+    '''
+    NOTE ON THE NEW `eta` & `epsilon`:
+    The above `eta` and `epsilon` are arrays formed by taking the initial
+    learning rate and exploration factor given and creating an array of
+    linearly decreasing values. Hence:
+    - eta[i] is the learning rate for the ith episode
+    - epsilon[i] is the exploration factor for the ith episode
+    '''
 
     #================================================
-    
+
     # EPSILON-GREEDY POLICY
     # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda s: {True: random_state.randint(0, env.n_actions),
-                          False: policy[s]}[random_state.rand() < epsilon]
-    
+    e_greedy = lambda s, e: {True: random_state.randint(0,env.n_actions),
+                             False: np.argmax(q[s])}[random_state.rand() < e]
+    # NOTE: `e` is the given epsilon value
+
     #================================================
 
     # LEARNING LOOP
@@ -59,29 +67,34 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
         # Beginning at the initial state before each episode:
         s = env.reset()
         # Selecting action `a` for `s` by epsilon-greedy policy based on `q`:
-        a = e_greedy(s)
+        a = e_greedy(s, epsilon[i])
         # While the state is not terminal:
         '''
         HOW TO CHECK IF A STATE IS TERMINAL?
-        A terminal state is one wherein the agent will transition to the
-        absorbing state for any action it takes. In our implementation, the
-        states are a sequence of integers starting from 0, with the greatest
-        integer `env.n_states-1` being reserved for the absorbing state.
-        If `a` state `s` is terminal, then the probability of transitioning to
-        the absorbing state for any action is 1, hence the following condition.
+        A terminal state is one wherein either the maximum number
+        of steps for taking actions is reached or the agent reaches the
+        absorbing state or the agent transitions to the absorbing state for any
+        action. In this implementation, the check for whether the terminal
+        state is reached is handled by the `done` flag of the `env.step`
+        function; if `False`, continue, else consider the state as terminal.
         '''
-        while env.p(env.n_states-1, s, a) != 1:
+        done = False
+        while not done:
             # Next state & reward after taking `a` from `s`:
-            next_s, r = env.draw(s, a)
+            next_s, r, done = env.step(a)
+            # NOTE: `env.step` automatically updates the state of the agent
+
             # Selecting action `next_a` for `next_s`:
             # NOTE: Selection is done by epsilon greedy policy based on `q`
-            next_a = e_greedy(next_s)
-            # Updating the action reward for the current state-action pair:
+            next_a = e_greedy(next_s, epsilon[i])
+
+            # Updating the action-value for the current state-action pair:
             # USING: Temporal difference for (s,a) with epsilon-greedy policy
             q[s, a] = q[s, a] + eta[i]*(r + gamma*q[next_s, next_a] - q[s, a])
+
             # Moving to the next state & action pair:
             s, a = next_s, next_a
-    
+
     #================================================
 
     # FINAL RESULTS
@@ -100,23 +113,7 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
 def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
     '''
     NOTE ON THE ARGUMENTS:
-    - `env`: Object of the chosen environment class (ex. FrozenLake)
-    - `max_episodes`: Upper limit of episodes the agent can go through
-    - `eta`:
-        - Array of learning rates w.r.t. episodes
-        - `eta[i]` ==> learning rate for the ith episode
-        - Meant to decrease linearly over time
-    - `gamma`:
-        - Discount factor
-        - Not subject to change over time
-    - `epsilon`:
-        - An array of exploration factors w.r.t. episodes
-        - `epsilon[i]` ==> exploration factor for the ith episode
-        - Exploration factor is w.r.t. epsilon-greedy policy
-        - Denotes the chance of selecting a random state
-    - `seed`:
-        - Optional seed for pseudorandom number generation
-        - By default, it is `None` ==> random seed will be chosen
+    Same as for the function `sarsa`.
     '''
     # INITIALISATION
     # Setting random state with `seed` for enabling replicability:
@@ -129,14 +126,19 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
     epsilon = np.linspace(epsilon, 0, max_episodes)
     # 3. Array of state-action values:
     q = np.zeros((env.n_states, env.n_actions))
+    '''
+    NOTE ON THE NEW `eta` & `epsilon`:
+    Check corresponding comment for the function `sarsa`.
+    '''
 
     #================================================
 
     # EPSILON-GREEDY POLICY
     # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda s: {True: random_state.randint(0, env.n_actions),
-                          False: policy[s]}[random_state.rand() < epsilon]
-    
+    e_greedy = lambda s, e: {True: random_state.randint(0, env.n_actions),
+                             False: np.argmax(q[s])}[random_state.rand() < e]
+    # NOTE: `e` is the given epsilon value
+
     #================================================
 
     # LEARNING LOOP
@@ -145,26 +147,25 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
         # Beginning at the initial state before each episode:
         s = env.reset()
         # Selecting action `a` for `s` by epsilon-greedy policy based on `q`:
-        a = e_greedy(s)
+        a = e_greedy(s, epsilon[i])
         # While the state is not terminal:
         '''
         HOW TO CHECK IF A STATE IS TERMINAL?
-        A terminal state is one wherein the agent will transition to the
-        absorbing state for any action it takes. In our implementation, the
-        states are a sequence of integers starting from 0, with the greatest
-        integer `env.n_states-1` being reserved for the absorbing state.
-        If a state s is terminal, then the probability of transitioning to
-        the absorbing state for any action is 1, hence the following condition.
+        Check corresponding comment for the function `sarsa`.
         '''
-        while env.p(env.n_states-1, s, a) != 1:
+        done = False
+        while not done:
             # Next state & reward after taking `a` from `s`:
-            next_s, r = env.draw(s, a)
-            # Updating the action reward for the current state-action pair:
+            next_s, r, done = env.step(a)
+            # NOTE: `env.step` automatically updates the state of the agent
+
+            # Updating the action-value for the current state-action pair:
             # USING: Temporal difference for (s,a) with greedy policy
             q[s, a] = q[s, a] + eta[i]*(r + gamma*np.max(q[next_s]) - q[s, a])
+
             # Moving to the next state & action pair:
-            s = next_s
-    
+            s, a = next_s, e_greedy(s, epsilon[i])
+
     #================================================
 
     # FINAL RESULTS
@@ -184,15 +185,16 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
 
 if __name__ == '__main__':
     # Defining the parameters:
-    env = FrozenLake(lake['small'], 0.1, 100)
+    env = FrozenLake(lake=LAKE['small'], slip=0.1, max_steps=None, seed=0)
+    # NOTE: Putting `max_steps=None` makes it default to the grid size
     max_episodes = 2000
     eta = 1
-    gamma = 0.9
+    gamma = GAMMA
     epsilon = 1
 
     # Running the functions:
-    SARSA = sarsa(env, max_episodes, eta, gamma, epsilon)
-    QLearning = q_learning(env, max_episodes, eta, gamma, epsilon)
+    SARSA = sarsa(env, max_episodes, eta, gamma, epsilon, 0)
+    QLearning = q_learning(env, max_episodes, eta, gamma, epsilon, 0)
     labels = ("sarsa", "q-learning")
 
     # Displaying results:
