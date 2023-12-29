@@ -35,7 +35,15 @@ This project aims to use reinforcement learning principles to create algorithms 
 **File name (without extension)**: `Q4_nonTabularModelFreeMethods`
 
 - SARSA with linear approximation of action-value function `linear_sarsa`
-- Q-Learning with linear approximation of action-value function `linear_q_learning`<br>
+- Q-Learning with linear approximation of action-value function `linear_q_learning`
+
+## Question 5: Deep Reinforcement Learning
+
+**File name (without extension)**: `Q5_deepReinforcmentLearning`
+
+- Convolutional neural network to learn action-values
+- Replay buffer to store state-transition data & draw samples from for training
+- Deep Q-network learning loop `deep_q_network_learning`
 
 ## Other implementation notes
 ### Setting random state for replicability
