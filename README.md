@@ -47,5 +47,5 @@ This project aims to use reinforcement learning principles to create algorithms 
 
 ## Other implementation notes
 ### Setting random state for replicability
-Sometimes when you are using randomization in a part of the codebase, you want to get the same result independent of the iteration you are running the code. `np.random.RandomState` allows you to set the same random state in all the NumPy operations, if there are related with randomization. In particular, you can pass a particular seed and replicate the same results over and over.
+Sometimes, when you are using randomization in a part of the codebase, you want to get the same result independent of the iteration you are running the code. This enables others to replicate and validate your results, despite the use of pseudorand number generation. The `np.random.RandomState` class allows you to set the same random state in all the NumPy operations involving randomization. In practice, you can pass a particular seed to the aforementioned class' constructor and thereby replicate the same pseudorandom number generations over and over.
 <br><br>**NOTE**: The methods available to an `np.random.RandomState` object are exactly all the randomization methods available in NumPy, such as `rand`, `randint`, `choice`, etc.
