@@ -44,25 +44,26 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
             # Obtaining current value of value function:
             # NOTE: We iterate through every possible action from state `s`
             value[s] = float(0)
-            for a in range(env.n_actions):
-                # NOTE: a ==> action
-                # If policy does not map `s` to `a`, move to next action:
-                if policy[s] != a: continue
-                # If policy does map `s` to `a`, update state value:
-                for _s in range(env.n_states):
-                    # NOTE: _s ==> next state
-                    value[s] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
-                    '''
-                    NOTE ON ABOVE USED FUNCTIONS:
-                    `env.p`: Probability of moving `s` to `_s` given action `a`
-                    `env.r`: Reward of moving `s` to `_s` given action `a`
-                    '''
+
+            # Choosing next action `a` based on the policy:
+            # NOTE: This only works because the policy is deterministic
+            a = policy[s]
+            
+            # Considering all states as next states & updating value of each:
+            for _s in range(env.n_states):
+                # NOTE: _s ==> next state
+                value[s] += env.p(_s, s, a)*(env.r(_s, s, a) + gamma*value[_s])
+                '''
+                NOTE ON ABOVE USED FUNCTIONS:
+                `env.p`: Probability of moving `s` to `_s` given action `a`
+                `env.r`: Reward of moving `s` to `_s` given action `a`
+                '''
             #------------------------------------
             # Obtaining the difference in state value:
             # NOTE: This is why we stored the previous value before in `v`
             if abs(value[s]-v) <= theta: flag += 1
 
-        # If difference in state value < theta for all states, stop:
+        # If difference in state value <= theta for all states, stop:
         if flag == env.n_states: break
     return value
 
@@ -127,8 +128,9 @@ def policy_iteration(env, gamma, theta, max_iterations, policy=None):
     for i in range(max_iterations):
         policy = policy_improvement(env, value, gamma)
         new_value = policy_evaluation(env, policy, gamma, theta, max_iterations)
-        # If all value evaluations change less than `theta`, break:
-        if all(abs(new_value-value) <= theta): break
+        # If max change in value evaluationn <= `theta`, break:
+        # NOTE: If max change <= `theta`, all changes are so!
+        if max(abs(new_value-value)) <= theta: break
         # Else, continue improving with the newly evaluated state values:
         value = new_value
 
@@ -171,7 +173,7 @@ def value_iteration(env, gamma, theta, max_iterations, value=None):
             value[s] = np.max(q)
             if abs(value[s]-v) <= theta: flag += 1
 
-        # If difference in state value < theta for all states, stop:
+        # If difference in state value <= theta for all states, stop:
         if flag == env.n_states: break
 
     #================================================
