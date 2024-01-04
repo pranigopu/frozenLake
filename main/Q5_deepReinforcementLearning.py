@@ -327,7 +327,7 @@ def deep_q_network_learning(env, max_episodes, learning_rate, gamma, epsilon, ba
         - Updated with every training step
     - tdqn ==> Target deep Q-network
         - The network used to estimate action-values based on past weights
-        - In essence, it is used to obtain the 'target' values to train the network
+        - In essence, it is used to obtain the "observed target" values to train the network
         - Updated periodically (we could set update frequency to match `dqp`)
         - Lower update frequency may make the learning process more resistant
           to getting stuck in local optima
