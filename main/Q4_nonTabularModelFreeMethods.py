@@ -145,6 +145,12 @@ def linear_sarsa(wenv, max_episodes, eta, gamma, epsilon, seed=None):
         # NOTE: `features` here represents the initial state
         q = features.dot(theta)
         # NOTE: `q` here is the rewards per action for the initial state
+        '''
+        NOTE ON THE SHAPE OF `q`:
+        `features.dot(theta)` produces `wenv.n_actions` dot products by
+        applying dot product between `theta` and each row vector of the matrix
+        `features`.
+        '''
         a = e_greedy(q, epsilon[i])
 
         done = False
@@ -210,6 +216,10 @@ def linear_q_learning(wenv, max_episodes, eta, gamma, epsilon, seed=None):
         # NOTE: `features` here represents the initial state
         q = features.dot(theta)
         # NOTE: `q` here is the rewards per action for the initial state
+        '''
+        NOTE ON THE SHAPE OF `q`:
+        See the corresponding comment for the function `linear_sarsa`.
+        '''
         a = e_greedy(q, epsilon[i])
 
         done = False
