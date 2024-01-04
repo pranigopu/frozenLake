@@ -202,7 +202,7 @@ class DeepQNetwork(torch.nn.Module):
     # Single step of training:
 
     def train_step(self, transitions, gamma, tdqn):
-        # TDQN ==> Temporary deep Q-network
+        # TDQN ==> Target deep Q-network
         # ... explained in comments for function `deep_q_network_learning`
         
         # Organising the transitions data into separate arrays:
@@ -325,8 +325,9 @@ def deep_q_network_learning(env, max_episodes, learning_rate, gamma, epsilon, ba
     - dqn ==> Deep Q-network
         - The network used to estimate the latest estimates of action-values
         - Updated with every training step
-    - tdqn ==> Temporary deep Q-network
+    - tdqn ==> Target deep Q-network
         - The network used to estimate action-values based on past weights
+        - In essence, it is used to obtain the 'target' values to train the network
         - Updated periodically (we could set update frequency to match `dqp`)
         - Lower update frequency may make the learning process more resistant
           to getting stuck in local optima
