@@ -202,6 +202,9 @@ class DeepQNetwork(torch.nn.Module):
     # Single step of training:
 
     def train_step(self, transitions, gamma, tdqn):
+        # TDQN ==> Temporary deep Q-network
+        # NOTE: TDQN is explained in the comments for the function `deep_q_network_learning`
+        
         # Organising the transitions data into separate arrays:
         states = np.array([transition[0] for transition in transitions])
         actions = np.array([transition[1] for transition in transitions])
