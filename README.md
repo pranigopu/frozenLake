@@ -49,3 +49,12 @@ This project aims to use reinforcement learning principles to create algorithms 
 ### Setting random state for replicability
 Sometimes, when you are using randomization in a part of the codebase, you want to get the same result independent of the iteration you are running the code. This enables others to replicate and validate your results, despite the use of pseudorand number generation. The `np.random.RandomState` class allows you to set the same random state in all the NumPy operations involving randomization. In practice, you can pass a particular seed to the aforementioned class' constructor and thereby replicate the same pseudorandom number generations over and over.
 <br><br>**NOTE**: The methods available to an `np.random.RandomState` object are exactly all the randomization methods available in NumPy, such as `rand`, `randint`, `choice`, etc.
+
+### Defining the $\epsilon$-greedy policy
+The $\epsilon$-greedy (epsilon-greedy) policy is a method of choosing an action from a state such that the probability of choosing a random action is $\epsilon$ while the probability of choosing the action that maximises the action-value function (as far as it has been estimated) from the given state is $1-\epsilon$. $\epsilon$ (epsilon) is called the "exploration factor". $\epsilon$-greedy is a solution to the exploration-exploitation dilemma, wherein the degree of exploration (i.e. expansion of actions unknown potential) is decided by the exploration factor.
+
+#### Breaking ties between reward-maximising actions
+When the above policy chooses to exploit rather than explore, it may be the case that there exist multiple actions that (within a tolerance level) maximise the action-value function from a given state. In such a case, exploration can be encouraged even during exploitation by making a random selection from the reward-maximising actions. This approach is _no worse and potentially better_ than simply picking the first action that maximises the action-value function from the given state, since it furthers exploration without reducing exploitation.
+
+#### Implementation details
+In practice, in exploitation, we create a list of actions that maximise the action-value for a given state, wherein the comparison of each action's action value to the maximum action-value is made with a tolerance level. This tolerance level is kept at the default values defined in the function `numpy.allclose`. Then, random selection is done on this list of actions to next action action.
