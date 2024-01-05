@@ -7,6 +7,7 @@ This repository contains my personal work regarding the project. The main reposi
 - Malo Hamon a.k.a. nocommentcode
   - Relevant repository: [ecs7002_assignment_2](https://github.com/nocommentcode/ecs7002_assignment_2)
   - Impact on my code:
+    - Showed the necessity for maintaining a random state with a set seed
     - Corrected the state-transition probability calculation method
     - Corrected the iterations-to-convergence counting for policy iteration
     - Updated the $\epsilon$-greedy policy to break ties between equally good actions during exploitation
