@@ -128,15 +128,6 @@ def linear_sarsa(wenv, max_episodes, eta, gamma, epsilon, seed=None):
 
     #================================================
 
-    # EPSILON-GREEDY POLICY
-    # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda q, e: {True: random_state.randint(0, wenv.n_actions),
-                             False: np.argmax(q)}[random_state.rand() < e]
-    # NOTE 1: `q` is the array of rewards per action for a given state
-    # NOTE 2: `e` is the given epsilon value
-
-    #================================================
-
     # LEARNING LOOP
     for i in range(max_episodes):
         # NOTE: i ==> episode number
@@ -151,7 +142,7 @@ def linear_sarsa(wenv, max_episodes, eta, gamma, epsilon, seed=None):
         applying dot product between `theta` and each row vector of the matrix
         `features`.
         '''
-        a = e_greedy(q, epsilon[i])
+        a = e_greedy(q, epsilon[i], wenv.n_actions, random_state)
 
         done = False
         while not done:
@@ -165,7 +156,7 @@ def linear_sarsa(wenv, max_episodes, eta, gamma, epsilon, seed=None):
             # NOTE: Selection is done by epsilon greedy policy based on `q`
             q = next_features.dot(theta)
             # NOTE: `q` here is the rewards per action for the next state
-            next_a = e_greedy(q, epsilon[i])
+            next_a = e_greedy(q, epsilon[i], wenv.n_actions, random_state)
             # NOTE: `next_a` is the action taken in the next state
 
             # Obtaining the full temporal difference of `(features, a)`:
@@ -199,15 +190,6 @@ def linear_q_learning(wenv, max_episodes, eta, gamma, epsilon, seed=None):
 
     #================================================
 
-    # EPSILON-GREEDY POLICY
-    # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda q, e: {True: random_state.randint(0,wenv.n_actions),
-                             False: np.argmax(q)}[random_state.rand() < e]
-    # NOTE 1: `q` is the array of rewards per action for a given state
-    # NOTE 2: `e` is the given epsilon value
-
-    #================================================
-
     # LEARNING LOOP
     for i in range(max_episodes):
         # NOTE: i ==> episode number
@@ -220,7 +202,7 @@ def linear_q_learning(wenv, max_episodes, eta, gamma, epsilon, seed=None):
         NOTE ON THE SHAPE OF `q`:
         See the corresponding comment for the function `linear_sarsa`.
         '''
-        a = e_greedy(q, epsilon[i])
+        a = e_greedy(q, epsilon[i], wenv.n_actions, random_state)
 
         done = False
         while not done:
@@ -245,7 +227,7 @@ def linear_q_learning(wenv, max_episodes, eta, gamma, epsilon, seed=None):
             # `next_features[a]` is feature vector for state `s` & action `a`
 
             # Moving to the next state & its corresponding action:
-            features, a = next_features, e_greedy(q, epsilon[i])
+            features, a = next_features, e_greedy(q, epsilon[i], wenv.n_actions, random_state)
 
     # Returning the parameter vector `theta`:
     return theta
