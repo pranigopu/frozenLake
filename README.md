@@ -1,6 +1,6 @@
 # _Frozen Lake_:<br>Reinforcement Learning Project
 
-## Contributors to the project
+## Contributors to the project & their impact on my own code
 
 - Malo Hamon a.k.a. nocommentcode
   - Relevant repository: [ecs7002_assignment_2](https://github.com/nocommentcode/ecs7002_assignment_2)
@@ -11,6 +11,7 @@
     - My code for generating the moving averages of discounted rewards per episode was derived from his
 - Pranav Gopalkrishna a.k.a. Prani Gopu (me)
 
+## Introduction
 This project aims to use reinforcement learning principles to create algorithms to find policies that would help us better navigate the "Frozen Lake" environment defined within this project. In this repository, there are two sets of code that are functionally identical. One set is in the Jupyter Notebook format, meant to visually demonstrate the outputs of the tests as well as present any additional explanations or commentary on the code. The other set is regular Python code, meant to be run as an integrated package. The respective sets of files are stored in the following directories of this repository:
 
 - Jupyter Notebook demonstrations: `frozenLake/demo/`
