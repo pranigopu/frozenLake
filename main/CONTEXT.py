@@ -10,6 +10,7 @@
 #   - `GAMMA`: Discount factor
 #   - `HUGE`: Arbitrarily large integer (practically infinity)
 # 3. Method `displayResults`: Policy & state-value display function
+# 4. Method `e_greedy`: Epsilon-greedy policy implementation
 
 #____________________________________________________________
 # 1. Imports
@@ -63,3 +64,35 @@ def displayResults(results, labels, env):
         print(f'AGENT PERFORMANCE AFTER {label.upper()}\n')
         state = env.reset()
         env.render(policy=result[0], value=result[1])
+
+#____________________________________________________________
+# 4. Epsilon-greedy policy implementation
+
+# NOTE: The following is generalised for the tabular & non-tabular methods
+
+def e_greedy(q, e, n_actions, random_state, s=None):
+    '''
+    NOTE ON THE ARGUMENTS:
+    - `q`: One of the following...
+        - The matrix of action-values for each state
+        - The array of action-values for a given state
+    - `e`: The exploration factor epsilon
+    - `n_actions`: The number of actions an agent can take from any state
+    - `random_state`: The set `numpy.random.RandomState` object
+    - `s`: The given state
+
+    If `s=None`, `q` is the array of action-values for a given state. Else,
+    `q` is the matrix of action-values for each state.
+    '''
+
+    # Storing the action-values for the given state `s` (if `s` is given):
+    if s != None: q = q[s]
+
+    # The epsilon-greedy policy:
+    if random_state.rand() < e:
+        return random_state.randint(0,n_actions)
+    else:
+        # Obtaining all actions that maximise action-value from state `s`:
+        best = [a for a in range(n_actions) if np.allclose(np.max(q), q[a])]
+        # Breaking the tie (if tie exists) using random selection:
+        return random_state.choice(best)
