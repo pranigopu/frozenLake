@@ -53,21 +53,13 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
 
     #================================================
 
-    # EPSILON-GREEDY POLICY
-    # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda s, e: {True: random_state.randint(0,env.n_actions),
-                             False: np.argmax(q[s])}[random_state.rand() < e]
-    # NOTE: `e` is the given epsilon value
-
-    #================================================
-
     # LEARNING LOOP
     for i in range(max_episodes):
         # NOTE: i ==> episode number
         # Beginning at the initial state before each episode:
         s = env.reset()
         # Selecting action `a` for `s` by epsilon-greedy policy based on `q`:
-        a = e_greedy(s, epsilon[i])
+        a = e_greedy(q, epsilon[i], env.n_actions, random_state, s)
         # While the state is not terminal:
         '''
         HOW TO CHECK IF A STATE IS TERMINAL?
@@ -86,7 +78,7 @@ def sarsa(env, max_episodes, eta, gamma, epsilon, seed=None):
 
             # Selecting action `next_a` for `next_s`:
             # NOTE: Selection is done by epsilon greedy policy based on `q`
-            next_a = e_greedy(next_s, epsilon[i])
+            next_a = e_greedy(q, epsilon[i], env.n_actions, random_state, next_s)
 
             # Updating the action-value for the current state-action pair:
             # USING: Temporal difference for (s,a) with epsilon-greedy policy
@@ -133,21 +125,13 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
 
     #================================================
 
-    # EPSILON-GREEDY POLICY
-    # Implementing the epsilon-greedy policy as a lambda function:
-    e_greedy = lambda s, e: {True: random_state.randint(0, env.n_actions),
-                             False: np.argmax(q[s])}[random_state.rand() < e]
-    # NOTE: `e` is the given epsilon value
-
-    #================================================
-
     # LEARNING LOOP
     for i in range(max_episodes):
         # NOTE: i ==> episode number
         # Beginning at the initial state before each episode:
         s = env.reset()
         # Selecting action `a` for `s` by epsilon-greedy policy based on `q`:
-        a = e_greedy(s, epsilon[i])
+        a = e_greedy(q, epsilon[i], env.n_actions, random_state, s)
         # While the state is not terminal:
         '''
         HOW TO CHECK IF A STATE IS TERMINAL?
@@ -164,7 +148,7 @@ def q_learning(env, max_episodes, eta, gamma, epsilon, seed=None):
             q[s, a] = q[s, a] + eta[i]*(r + gamma*np.max(q[next_s]) - q[s, a])
 
             # Moving to the next state & action pair:
-            s, a = next_s, e_greedy(s, epsilon[i])
+            s, a = next_s, e_greedy(q, epsilon[i], env.n_actions, random_state, s)
 
     #================================================
 
