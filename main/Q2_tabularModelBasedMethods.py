@@ -48,7 +48,7 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
             # Choosing next action `a` based on the policy:
             # NOTE: This only works because the policy is deterministic
             a = policy[s]
-            
+
             # Considering all states as next states & updating value of each:
             for _s in range(env.n_states):
                 # NOTE: _s ==> next state
@@ -65,7 +65,9 @@ def policy_evaluation(env, policy, gamma, theta, max_iterations):
 
         # If difference in state value <= theta for all states, stop:
         if flag == env.n_states: break
-    return value
+
+    # FORMAT OF RETURN: state-values, iterations taken to converge
+    return value, i
 
 #____________________________________________________________
 # 2. Policy improvement
@@ -122,20 +124,26 @@ def policy_iteration(env, gamma, theta, max_iterations, policy=None):
     '''
     if policy is None: policy = np.zeros(env.n_states, dtype=int)
     else: policy = np.array(policy, dtype=int)
+    # `n` will store the value of iterations to converge:
+    n = 0
     # Initialising state values with respect to existing policy:
-    value = policy_evaluation(env, policy, gamma, theta, max_iterations)
+    value, n = policy_evaluation(env, policy, gamma, theta, max_iterations)
     # Policy iteration loop:
     for i in range(max_iterations):
-        policy = policy_improvement(env, value, gamma)
-        new_value = policy_evaluation(env, policy, gamma, theta, max_iterations)
-        # If max change in value evaluationn <= `theta`, break:
-        # NOTE: If max change <= `theta`, all changes are so!
-        if max(abs(new_value-value)) <= theta: break
-        # Else, continue improving with the newly evaluated state values:
-        value = new_value
+        new_policy = policy_improvement(env, value, gamma)
+
+        # If policy does not change, it means we have converged to the optimal:
+        if all(policy == new_policy): break
+        # Else, continue improving the policy:
+        policy = new_policy
+
+        # Updating the state-values:
+        value, k = policy_evaluation(env, policy, gamma, theta, max_iterations)
+        # Updating number of evaluation steps needed:
+        n += k
 
     # FORMAT OF RETURN: policy, state-values, iterations taken to converge
-    return policy, value, i
+    return policy, value, n
 
 #____________________________________________________________
 # 4. Value iteration
