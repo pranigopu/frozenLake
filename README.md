@@ -2,7 +2,7 @@
 
 ## Contributors to the project
 
-- Malo Hamon
+- Malo Hamon a.k.a. nocommentcode
   - Relevant repository: [ecs7002_assignment_2](https://github.com/nocommentcode/ecs7002_assignment_2)
   - Impact on my code:
     - Corrected the state-transition probability calculation method
