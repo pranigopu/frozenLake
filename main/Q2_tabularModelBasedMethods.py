@@ -83,7 +83,7 @@ def policy_improvement(env, value, gamma):
     The goal of policy improvement is to improve on the previously used policy
     (which is implicit in the array of state values, which is evaluated with
     respect to some policy). We do this by choosing for each state `s` the
-    action `a` such that we maximise the reward of taking a from `s`
+    action `a` such that we maximise the reward of taking `a` from `s`
     (irrespective of policy) then following the previous policy (which is
     implicit in the array of state values).
     '''
