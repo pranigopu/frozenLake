@@ -1,6 +1,6 @@
 # _Frozen Lake_:<br>Reinforcement Learning Project
 
-This repository contains my personal work regarding the project. The main repository of the project (which was used for the final submission) is given here: [ecs7002_assignment_2](https://github.com/nocommentcode/ecs7002_assignment_2)
+This repository contains my personal work with respect to the project. The method of collaboration in this project was The main repository of the project (which was used for the final submission) is given here: [ecs7002_assignment_2](https://github.com/nocommentcode/ecs7002_assignment_2)
 
 ## Other contributors to the project & their impact on my own code
 
