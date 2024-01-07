@@ -7,7 +7,7 @@ This project was a team project with the following contributors:
 
 This repository contains my personal work with respect to the project. The method of collaboration in this project was to attempt the assignment personally, before coming together to check each one's implementations, decide on the final code and make the report. The main repository of the project (which was used for the final submission and is owned by Malo Hamon) is linked [here](https://github.com/nocommentcode/ecs7002_assignment_2).
 
-The functionality of the implementations in this repository and the main one are similar, if not the same in most cases (although the main repository is more up-to-date). The main difference between this repository and the one used for the final submission is the extensiveness of additional reference material; I have included many comments, notes and demonstrations of parts or aspects of the implementations that were not needed for the final submission but that can be quite helpful in understanding the conceptual as well as practical basis of the implementations.
+The functionality of the implementations in this repository and the main one are similar, if not the same in most cases (although the main repository is more up-to-date). The main difference between this repository and the one used for the final submission is the extensiveness of additional reference material; I have included many comments, notes and demonstrations of parts or aspects of the implementations that were not needed for the final submission but can be quite helpful in understanding the conceptual as well as practical basis of the implementations.
 
 ## Acknowledgement
 
