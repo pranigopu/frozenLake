@@ -22,7 +22,7 @@ The method of collaboration in this project was to attempt the coding-related qu
 - Reviewed questions 1, 2, 5 and 6 of the report
 - Put together and tested the final code for submission
 
-<br>I did most of my implementations independently, with extensive comments that contributed to the implementation notes in the report. Cross-checking my code with Malo's after implementation brought to light key mistakes and improvements that led to further understanding, part of which was later added to the report. I wrote the first draft of the report, but questions 3 and 4 of the report were entirely reworked by Malo. I later used Malo's updated code to redo the graphs of question 2 of the report, and used his insights to correct the results of question 1. In summary, my contributions were as follows:
+<br>I first did all of my implementations independently, with extensive comments that contributed to the implementation notes in the report. Cross-checking my code with Malo's after implementation brought to light key mistakes and improvements that led to further understanding, part of which was later added to the report. I wrote the first draft of the report, but questions 3 and 4 of the report were entirely reworked by Malo. I later used Malo's updated code to redo the graphs of question 2 of the report, and used his insights to correct the results of question 1. In summary, my contributions were as follows:
 
 - Implemented the `FrozenLake` environment
 - Implemented policy and value iteration
@@ -34,7 +34,7 @@ The method of collaboration in this project was to attempt the coding-related qu
 - Reviewed question 4 of the report
 - Wrote the definitions section and implementation notes
 
-<br>Nimesh Bansal worked on the implementations independently, but was unable to contribute much to the report due to illness. In summary, Nimesh's work was as follows:
+<br>Nimesh Bansal worked on the implementations independently, but was unable to contribute as much to the final submission as me or Malo due to illness. In summary, Nimesh's work was as follows:
 
 - Implemented the `FrozenLake` environment
 - Implemented policy and value iteration
