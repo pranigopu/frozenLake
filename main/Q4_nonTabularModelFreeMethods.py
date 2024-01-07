@@ -32,10 +32,10 @@ class LinearWrapper:
             features[a, i] = 1.0
         '''
         EXPECTED RESULT:
-        `features` is such that each row i corresponds to an action i, each
+        `features` is such that each row x corresponds to an action x, each
         column corresponds to a state-action pair (see implementation notes
-        for more clarity on the structure), and for each row i, 1.0 is assigned
-        only to those indices that correspond the given state s and action i.
+        for more clarity on the structure), and for each row x, 1.0 is assigned
+        only to those indices that correspond the given state s and action x.
         Hence, each row vector is 1.0 at only one position and 0 in all others.
         '''
 
