@@ -11,7 +11,7 @@ The functionality of the implementations in this repository and the main one are
 
 ## Acknowledgement
 
-Malo Hamon's code as well as insights helped in the following ways:
+Malo Hamon's code as well as insights helped my own work in the following ways:
 
 - Revealed the necessity for maintaining a random state with a set seed
 - Revealed errors in my the state-transition probability calculation method
