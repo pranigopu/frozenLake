@@ -1,12 +1,3 @@
-<style>
-  h1, h2, h3, h4, h5, p, ul, ol{
-    font-family:"Times New Roman"
-  }
-  p, ul, ol{
-    font-size:20px
-  }
-</style>
-
 # ECS7002P: _Artificial Intelligence in Games_<br>Assignment 2, Individual Reflection
 
 ## Student details
