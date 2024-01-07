@@ -9,7 +9,7 @@ This repository contains my personal work with respect to the project. The metho
 
 The functionality of the implementations in this repository and the main one are similar, if not the same in most cases (although the main repository is more up-to-date). The main difference between this repository and the one used for the final submission is the extensiveness of additional reference material; I have included many comments, notes and demonstrations of parts or aspects of the implementations that were not needed for the final submission but can be quite helpful in understanding the conceptual as well as practical basis of the implementations.
 
-## Acknowledgement
+## Acknowledgements
 
 Malo Hamon's code as well as insights helped my own work in the following ways:
 
