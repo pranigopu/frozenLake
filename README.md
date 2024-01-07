@@ -11,14 +11,13 @@ The functionality of the implementations in this repository and the main one are
 
 ## Acknowledgement
 
-- Malo Hamon a.k.a. nocommentcode
-  - Relevant repository: [ecs7002_assignment_2](https://github.com/nocommentcode/ecs7002_assignment_2)
-  - Impact on my code:
-    - Showed the necessity for maintaining a random state with a set seed
-    - Corrected the state-transition probability calculation method
-    - Corrected the iterations-to-convergence counting for policy iteration
-    - Updated the $\epsilon$-greedy policy to break ties between equally good actions during exploitation
-    - My code for generating the moving averages of discounted rewards per episode was derived from his
+Malo Hamon's code as well as insights helped in the following ways:
+
+- Revealed the necessity for maintaining a random state with a set seed
+- Revealed errors in my the state-transition probability calculation method
+- Corrected the iterations-to-convergence counting for policy iteration
+- Updated the $\epsilon$-greedy policy to break ties between equally good actions during exploitation
+- My code for generating the moving averages of discounted rewards per episode was derived from his
 
 ## Introduction
 This project aims to use reinforcement learning principles to create algorithms to find policies that would help us better navigate the "Frozen Lake" environment defined within this project. In this repository, there are two sets of code that are functionally identical. One set is in the Jupyter Notebook format, meant to visually demonstrate the outputs of the tests as well as present any additional explanations or commentary on the code. The other set is regular Python code, meant to be run as an integrated package. The respective sets of files are stored in the following directories of this repository:
