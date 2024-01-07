@@ -1,8 +1,9 @@
 # _Frozen Lake_:<br>Reinforcement Learning Project
 
-This project was a team project with the following contributors:
+This project was a team project with the team members (in alphabetical order):
 
 - [Malo Hamon a.k.a. nocommentcode](https://github.com/nocommentcode)
+- Nimesh Bansal
 - [Pranav Narendra Gopalkrishna a.k.a. Prani Gopu](https://github.com/pranigopu)
 
 This repository contains my personal work with respect to the project. The method of collaboration in this project was to attempt the assignment personally, before coming together to check each one's implementations, decide on the final code and make the report. The main repository of the project (which was used for the final submission and is owned by Malo Hamon) is linked [here](https://github.com/nocommentcode/ecs7002_assignment_2).
