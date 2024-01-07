@@ -31,7 +31,8 @@ The method of collaboration in this project was to attempt the coding-related qu
 - Implemented and extensively documented deep Q-network learning
 - Wrote the first draft of the report for all questions
 - Wrote and expanded on questions 1, 2, 5 and 6 of the report
-- Reviewed question 4 of the report
+- Reviewed question 3 of the report
+- Reformulated the final answer to question 4 of the report
 - Wrote the definitions section and implementation notes
 
 <br>Nimesh Bansal worked on the implementations independently, but was unable to contribute as much to the final submission as me or Malo due to severe illness. In summary, Nimesh's work was as follows:
