@@ -17,7 +17,7 @@ The method of collaboration in this project was to attempt the coding-related qu
 - Implemented linear function approximation methods for the above
 - Implemented deep Q-network learning
 - Wrote, executed and reported on optimising SARSA control and Q-learning parameters
-- Documenting the final code's basic structure
+- Documented the final code's basic structure
 - Rewrote and improved on the answer to question 4 of the report
 - Reviewed questions 1, 2, 5 and 6 of the report
 - Put together and tested the final code for submission
@@ -34,7 +34,7 @@ The method of collaboration in this project was to attempt the coding-related qu
 - Reviewed question 4 of the report
 - Wrote the definitions section and implementation notes
 
-<br>Nimesh Bansal worked on the implementations independently, but was unable to contribute as much to the final submission as me or Malo due to illness. In summary, Nimesh's work was as follows:
+<br>Nimesh Bansal worked on the implementations independently, but was unable to contribute as much to the final submission as me or Malo due to severe illness. In summary, Nimesh's work was as follows:
 
 - Implemented the `FrozenLake` environment
 - Implemented policy and value iteration
