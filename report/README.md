@@ -13,4 +13,4 @@ The final report contains the following:
 
 ## Additional links
 
-- Research paper referenced in the final report:<br>Human-level control through Deep Reinforcement Learning(https://github.com/tjwhitaker/human-level-control-through-deep-reinforcement-learning/blob/master/research/human-level-control-through-deep-reinforcement-learning.pdf)
+- Research paper referenced in the final report:<br>[Human-level control through Deep Reinforcement Learning](https://github.com/tjwhitaker/human-level-control-through-deep-reinforcement-learning/blob/master/research/human-level-control-through-deep-reinforcement-learning.pdf)
