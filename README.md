@@ -1,10 +1,15 @@
 # _Frozen Lake_:<br>Reinforcement Learning Project
 
-This repository contains my personal work with respect to the project. The method of collaboration in this project was to attempt the assignment personally, before coming together to check each one's implementations, decide on the final code and make the report. The main repository of the project (which was used for the final submission) is given here: [ecs7002_assignment_2](https://github.com/nocommentcode/ecs7002_assignment_2)
+This project was a team project with the following contributors:
 
-The functionality of the implementations are similar, if not the same in most cases. The main difference between this repository and the main submission one is the extensiveness of comments and documentation; I have included many comments, notes and demonstrations of parts or aspects of the implementations that were not needed for the final submission but can be quite helpful in understanding the conceptual as well as practical basis of the implementations.
+- [Malo Hamon a.k.a. nocommentcode](https://github.com/nocommentcode)
+- [Pranav Narendra Gopalkrishna a.k.a. Prani Gopu](https://github.com/pranigopu)
 
-## Other contributors to the project & their impact on my own code
+This repository contains my personal work with respect to the project. The method of collaboration in this project was to attempt the assignment personally, before coming together to check each one's implementations, decide on the final code and make the report. The main repository of the project (which was used for the final submission and is owned by Malo Hamon) is linked [here](https://github.com/nocommentcode/ecs7002_assignment_2).
+
+The functionality of the implementations in this repository and the main one are similar, if not the same in most cases (although the main repository is more up-to-date). The main difference between this repository and the main submission one is the extensiveness of comments and documentation; I have included many comments, notes and demonstrations of parts or aspects of the implementations that were not needed for the final submission but can be quite helpful in understanding the conceptual as well as practical basis of the implementations.
+
+## Acknowledgement
 
 - Malo Hamon a.k.a. nocommentcode
   - Relevant repository: [ecs7002_assignment_2](https://github.com/nocommentcode/ecs7002_assignment_2)
