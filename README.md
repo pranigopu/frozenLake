@@ -17,7 +17,7 @@ Malo Hamon's code as well as insights helped my own work in the following ways:
 - Revealed errors in my state-transition probability computation
 - Corrected iterations-to-convergence counting for policy iteration
 - Updated $\epsilon$-greedy policy to break ties between equally good actions
-- His code was the basis for my code for reporting on per-episode discounted rewards' moving averages
+- My code for reporting on per-episode discounted rewards' moving averages is derived from his
 
 ## Introduction
 This project aims to use reinforcement learning principles to create algorithms to find policies that would help us better navigate the "Frozen Lake" environment defined within this project. In this repository, there are two sets of code that are functionally identical. One set is in the Jupyter Notebook format, meant to visually demonstrate the outputs of the tests as well as present any additional explanations or commentary on the code. The other set is regular Python code, meant to be run as an integrated package. The respective sets of files are stored in the following directories of this repository:
